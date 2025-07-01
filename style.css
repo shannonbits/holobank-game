@@ -16,16 +16,18 @@
     box-sizing: border-box;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 body {
     background-color: var(--dark);
     color: var(--white);
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     min-height: 100vh;
+    line-height: 1.6;
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Orbitron', sans-serif;
     font-weight: 600;
 }
 
@@ -37,6 +39,7 @@ h1, h2, h3, h4 {
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--gray);
+    z-index: 100;
 }
 
 .logo {
@@ -48,7 +51,7 @@ h1, h2, h3, h4 {
 .logo h1 {
     color: var(--accent);
     font-size: 1.8rem;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 nav {
@@ -65,6 +68,7 @@ nav a {
     text-decoration: none;
     transition: all 0.3s;
     border-left: 4px solid transparent;
+    font-weight: 500;
 }
 
 nav a img {
@@ -103,7 +107,7 @@ nav a.active {
     justify-content: center;
     font-weight: bold;
     margin-right: 10px;
-    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
 }
 
 .user-info {
@@ -112,18 +116,21 @@ nav a.active {
 }
 
 .username {
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 .balance {
     font-size: 0.8rem;
     color: var(--accent);
+    font-weight: 500;
 }
 
 .main-content {
     margin-left: var(--sidebar-width);
     flex: 1;
     padding: 30px;
+    max-width: 1200px;
 }
 
 header {
@@ -135,48 +142,61 @@ header h2 {
     font-size: 1.8rem;
 }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
+/* Card Styles */
 .card {
     background-color: var(--gray);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .card h3 {
     margin-bottom: 15px;
     color: var(--accent);
     font-size: 1.2rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
 .balance-amount {
     font-size: 2.5rem;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--accent);
     display: flex;
     align-items: baseline;
+    margin: 15px 0;
 }
 
 .balance-amount .amount {
-    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
 }
 
 .balance-amount .currency {
     font-size: 1.2rem;
     margin-left: 5px;
     color: var(--white);
+    font-weight: 500;
 }
 
 .portfolio-item, .inventory-item {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
+    padding: 10px 0;
     border-bottom: 1px solid var(--light-gray);
+    align-items: center;
 }
 
 .portfolio-item:last-child, .inventory-item:last-child {
@@ -184,28 +204,33 @@ header h2 {
 }
 
 .crypto-name {
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .crypto-value {
     color: var(--accent);
+    font-weight: 500;
 }
 
 .action-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 10px;
+    margin-top: 15px;
 }
 
 .action-btn {
     background-color: var(--accent-dark);
     color: var(--darker);
-    padding: 10px;
+    padding: 12px;
     text-align: center;
-    border-radius: 4px;
+    border-radius: 6px;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
     transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
 .action-btn:hover {
@@ -213,7 +238,277 @@ header h2 {
     transform: translateY(-2px);
 }
 
+/* Game-specific styles */
+.game-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.game {
+    background-color: var(--gray);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.game h3 {
+    color: var(--accent);
+    margin-top: 0;
+    font-size: 1.3rem;
+}
+
+.game-controls {
+    margin-top: 15px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    background-color: var(--light-gray);
+    border: 1px solid var(--lighter-gray);
+    color: var(--white);
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn {
+    background-color: var(--accent-dark);
+    color: var(--darker);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.result {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: var(--light-gray);
+    font-weight: 500;
+}
+
+/* Trading styles */
+.trading-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.trader-card, .user-section {
+    background-color: var(--gray);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.trader-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.trader-name {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.trader-balance {
+    color: var(--white);
+    font-weight: 500;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.item-card {
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.item-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.item-price {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.item-quantity {
+    font-size: 0.8rem;
+    color: var(--white);
+    font-weight: 400;
+}
+
+.trade-form {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+/* Crypto styles */
+.crypto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.crypto-card {
+    background-color: var(--gray);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.crypto-card h3 {
+    color: var(--accent);
+    margin-top: 0;
+    font-size: 1.3rem;
+}
+
+.price {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.chart {
+    height: 100px;
+    background-color: var(--dark);
+    margin: 15px 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.chart-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    stroke: var(--accent);
+    stroke-width: 2;
+    fill: none;
+}
+
+.portfolio {
+    margin-top: 30px;
+}
+
+/* Game elements */
+.coin {
+    width: 80px;
+    height: 80px;
+    background-color: #f5d742;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto;
+    font-size: 24px;
+    color: #000;
+    transition: transform 0.5s;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dice {
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    margin: 15px auto;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dot {
+    width: 15px;
+    height: 15px;
+    background-color: #000;
+    border-radius: 50%;
+    align-self: center;
+    justify-self: center;
+}
+
+.slot-machine {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.slot {
+    width: 60px;
+    height: 80px;
+    background-color: #fff;
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #000;
+    overflow: hidden;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
 /* Responsive adjustments */
+@media (max-width: 900px) {
+    .trading-container {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
@@ -231,10 +526,13 @@ header h2 {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        padding: 10px 0;
     }
     
     nav a {
-        flex: 1 0 auto;
+        flex: 1 0 120px;
+        padding: 10px;
+        justify-content: center;
     }
     
     .user-profile {
@@ -244,5 +542,30 @@ header h2 {
     
     .main-content {
         margin-left: 0;
+        padding: 20px;
     }
+    
+    .dashboard-grid, .game-container, .crypto-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes spin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(720deg); }
+}
+
+.spin {
+    animation: spin 1s;
 }
