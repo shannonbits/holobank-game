@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - HoloBank</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Create Account</h1>
+            <p>Start with 100 free holobucks!</p>
+        </header>
+        
+        <div class="terminal">
+            <div id="account-form">
+                <label for="username">Choose a username:</label>
+                <input type="text" id="username" class="input-field">
+                <button id="create-btn" class="btn">Create Account</button>
+                <p id="message"></p>
+            </div>
+        </div>
+        
+        <a href="index.html" class="btn">Back to Home</a>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('create-btn').addEventListener('click', function() {
+            const username = document.getElementById('username').value.trim();
+            const messageEl = document.getElementById('message');
+            
+            if (!username) {
+                messageEl.textContent = "Please enter a username";
+                return;
+            }
+            
+            if (createUser(username)) {
+                messageEl.textContent = `Account created! Welcome ${username}. You received 100 holobucks.`;
+                setTimeout(() => {
+                    window.location.href = "wallet.html";
+                }, 2000);
+            } else {
+                messageEl.textContent = "Username already taken";
+            }
+        });
+    </script>
+</body>
+</html>
