@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet - HoloBank</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>My Wallet</h1>
+            <p>Manage your holobucks</p>
+        </header>
+        
+        <div class="terminal">
+            <div id="wallet-info">
+                <p>Loading your wallet...</p>
+            </div>
+        </div>
+        
+        <a href="index.html" class="btn">Back to Home</a>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameData = getGameData();
+            const walletEl = document.getElementById('wallet-info');
+            
+            if (!gameData.currentUser) {
+                walletEl.innerHTML = "<p>No account found. <a href='account.html'>Create one first</a></p>";
+                return;
+            }
+            
+            const user = gameData.users[gameData.currentUser];
+            walletEl.innerHTML = `
+                <p>Username: <strong>${gameData.currentUser}</strong></p>
+                <p>Balance: <strong>${user.balance} holobucks</strong></p>
+                <p>Account created: ${new Date(user.createdAt).toLocaleDateString()}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
