@@ -3,30 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoloBank - Virtual Economy</title>
+    <title>HoloBank - Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
+    <div class="sidebar">
+        <div class="logo">
             <h1>HoloBank</h1>
-            <p>Your virtual economy playground</p>
-        </header>
-        
+        </div>
         <nav>
-            <a href="account.html" class="btn">Create Account</a>
-            <a href="wallet.html" class="btn">My Wallet</a>
-            <a href="gamble.html" class="btn">Gambling</a>
-            <a href="crypto.html" class="btn">Virtual Coins</a>
-            <a href="trade.html" class="btn">Trading</a>
+            <a href="index.html" class="active"><img src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/home-146.png" alt="Home"> Dashboard</a>
+            <a href="gamble.html"><img src="https://icons.veryicon.com/png/o/miscellaneous/cloud-call-center/gambling-1.png" alt="Gamble"> Gambling</a>
+            <a href="crypto.html"><img src="https://icons.veryicon.com/png/o/business/financial-linear-icon/bitcoin-30.png" alt="Crypto"> Crypto Exchange</a>
+            <a href="trade.html"><img src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/exchange-4.png" alt="Trade"> Trading</a>
         </nav>
-        
-        <div class="terminal">
-            <p>> Welcome to HoloBank</p>
-            <p>> Start with 100 holobucks</p>
-            <p>> Grow your virtual wealth</p>
+        <div class="user-profile" id="sidebar-user">
+            <div class="avatar">?</div>
+            <div class="user-info">
+                <span class="username">Guest</span>
+                <span class="balance">0 holobucks</span>
+            </div>
         </div>
     </div>
+
+    <div class="main-content">
+        <header>
+            <h2>Dashboard</h2>
+        </header>
+        
+        <div class="dashboard-grid">
+            <div class="card balance-card">
+                <h3>Your Balance</h3>
+                <div class="balance-amount" id="main-balance">Loading...</div>
+            </div>
+            
+            <div class="card crypto-card">
+                <h3>Crypto Portfolio</h3>
+                <div id="crypto-portfolio">
+                    <p>No crypto holdings yet</p>
+                </div>
+            </div>
+            
+            <div class="card inventory-card">
+                <h3>Inventory</h3>
+                <div id="user-inventory">
+                    <p>Your inventory is empty</p>
+                </div>
+            </div>
+            
+            <div class="card quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <a href="gamble.html" class="action-btn">Gamble</a>
+                    <a href="crypto.html" class="action-btn">Trade Crypto</a>
+                    <a href="trade.html" class="action-btn">Trade Items</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameData = getGameData();
+            
+            // Update sidebar user info
+            if (gameData.currentUser) {
+                const user = gameData.users[gameData.currentUser];
+                const sidebarUser = document.getElementById('sidebar-user');
+                
+                sidebarUser.querySelector('.username').textContent = gameData.currentUser;
+                sidebarUser.querySelector('.balance').textContent = `${user.balance} holobucks`;
+                sidebarUser.querySelector('.avatar').textContent = gameData.currentUser.charAt(0).toUpperCase();
+                
+                // Update main balance
+                document.getElementById('main-balance').innerHTML = `
+                    <span class="amount">${user.balance}</span>
+                    <span class="currency">holobucks</span>
+                `;
+                
+                // Update crypto portfolio
+                updateCryptoPortfolio();
+                
+                // Update inventory
+                updateInventory();
+            } else {
+                document.getElementById('sidebar-user').querySelector('.username').textContent = "Guest";
+                document.getElementById('sidebar-user').querySelector('.balance').textContent = "0 holobucks";
+                document.getElementById('main-balance').textContent = "Please create an account first";
+            }
+        });
+        
+        function updateCryptoPortfolio() {
+            const gameData = getGameData();
+            const portfolioEl = document.getElementById('crypto-portfolio');
+            
+            if (!gameData.currentUser || !gameData.users[gameData.currentUser].crypto || 
+                Object.keys(gameData.users[gameData.currentUser].crypto).length === 0) {
+                portfolioEl.innerHTML = "<p>No crypto holdings yet</p>";
+                return;
+            }
+            
+            let html = '';
+            for (const [symbol, amount] of Object.entries(gameData.users[gameData.currentUser].crypto)) {
+                const value = amount * gameData.crypto[symbol].price;
+                html += `
+                    <div class="portfolio-item">
+                        <span class="crypto-name">${symbol}</span>
+                        <span class="crypto-amount">${amount.toFixed(4)}</span>
+                        <span class="crypto-value">${value.toFixed(2)} holobucks</span>
+                    </div>
+                `;
+            }
+            
+            portfolioEl.innerHTML = html;
+        }
+        
+        function updateInventory() {
+            const gameData = getGameData();
+            const inventoryEl = document.getElementById('user-inventory');
+            
+            if (!gameData.currentUser || !gameData.users[gameData.currentUser].items || 
+                gameData.users[gameData.currentUser].items.length === 0) {
+                inventoryEl.innerHTML = "<p>Your inventory is empty</p>";
+                return;
+            }
+            
+            let html = '';
+            gameData.users[gameData.currentUser].items.forEach(item => {
+                html += `
+                    <div class="inventory-item">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-quantity">${item.quantity}</span>
+                    </div>
+                `;
+            });
+            
+            inventoryEl.innerHTML = html;
+        }
+    </script>
 </body>
 </html>
