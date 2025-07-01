@@ -5,326 +5,318 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trading - HoloBank</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        .npc-grid {
+        .trading-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin: 20px 0;
         }
         
-        .npc-card {
+        .trader-card {
             background-color: var(--gray);
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 5px;
-            border-left: 3px solid var(--accent);
+            margin-bottom: 20px;
         }
         
-        .npc-card h3 {
-            margin-top: 0;
-            color: var(--accent);
-        }
-        
-        .inventory {
-            margin: 15px 0;
-        }
-        
-        .inventory-item {
+        .trader-header {
             display: flex;
             justify-content: space-between;
-            padding: 8px;
-            background-color: var(--light-gray);
-            margin: 5px 0;
-            border-radius: 4px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
         }
         
-        .trade-form {
-            margin-top: 15px;
+        .trader-name {
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
         }
         
-        .trade-form input, .trade-form select {
-            width: 100%;
-            margin: 5px 0;
-            padding: 8px;
-            background-color: var(--light-gray);
-            border: 1px solid var(--light-gray);
+        .trader-balance {
             color: var(--white);
         }
         
-        .inventory-title {
-            display: flex;
-            justify-content: space-between;
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .item-card {
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .item-name {
             font-weight: bold;
             margin-bottom: 5px;
+        }
+        
+        .item-price {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .item-quantity {
+            font-size: 0.8rem;
+            color: var(--white);
+        }
+        
+        .trade-form {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--gray);
+            border: 1px solid var(--lighter-gray);
+            color: var(--white);
+            border-radius: 4px;
+        }
+        
+        .trade-btn {
+            background-color: var(--accent-dark);
+            color: var(--darker);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .trade-btn:hover {
+            background-color: var(--accent);
+        }
+        
+        .user-section {
+            background-color: var(--gray);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .trading-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>HoloTrade</h1>
-            <p>Trade with virtual merchants</p>
-        </header>
-        
-        <div id="balance-display" class="terminal">
-            <p>Loading your balance...</p>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>HoloBank</h1>
         </div>
-        
-        <div class="npc-grid" id="npc-list">
-            <!-- NPC cards will be inserted here -->
-        </div>
-        
-        <div class="terminal">
-            <h3>Your Inventory</h3>
-            <div id="player-inventory">
-                <p>Loading your inventory...</p>
+        <nav>
+            <a href="index.html"><img src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/home-146.png" alt="Home"> Dashboard</a>
+            <a href="gamble.html"><img src="https://icons.veryicon.com/png/o/miscellaneous/cloud-call-center/gambling-1.png" alt="Gamble"> Gambling</a>
+            <a href="crypto.html"><img src="https://icons.veryicon.com/png/o/business/financial-linear-icon/bitcoin-30.png" alt="Crypto"> Crypto Exchange</a>
+            <a href="trade.html" class="active"><img src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/exchange-4.png" alt="Trade"> Trading</a>
+        </nav>
+        <div class="user-profile" id="sidebar-user">
+            <div class="avatar">?</div>
+            <div class="user-info">
+                <span class="username">Guest</span>
+                <span class="balance">0 holobucks</span>
             </div>
         </div>
-        
-        <a href="index.html" class="btn">Back to Home</a>
     </div>
-    
+
+    <div class="main-content">
+        <header>
+            <h2>Trading</h2>
+        </header>
+        
+        <div class="trading-container">
+            <div class="user-section">
+                <h3>Your Inventory</h3>
+                <div id="user-inventory">
+                    <p>Your inventory is empty</p>
+                </div>
+                
+                <div class="balance-display">
+                    <h3>Your Balance</h3>
+                    <div id="user-balance">0 holobucks</div>
+                </div>
+            </div>
+            
+            <div class="traders-list">
+                <h3>Available Traders</h3>
+                <div id="npcs-container">
+                    <!-- NPC traders will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
-        // Item database
-        const itemsDB = [
-            { id: 1, name: "Holocard", basePrice: 50 },
-            { id: 2, name: "Virtual Gem", basePrice: 120 },
-            { id: 3, name: "Data Crystal", basePrice: 80 },
-            { id: 4, name: "Code Fragment", basePrice: 30 },
-            { id: 5, name: "AI Core", basePrice: 200 },
-            { id: 6, name: "Neon Sword", basePrice: 150 },
-            { id: 7, name: "Cyber Helmet", basePrice: 90 },
-            { id: 8, name: "Glitch Potion", basePrice: 60 }
-        ];
-        
-        // Update balance display
-        function updateBalance() {
+        document.addEventListener('DOMContentLoaded', function() {
             const gameData = getGameData();
+            
+            // Update sidebar user info
             if (gameData.currentUser) {
                 const user = gameData.users[gameData.currentUser];
-                document.getElementById('balance-display').innerHTML = `
-                    <p>Welcome, <strong>${gameData.currentUser}</strong></p>
-                    <p>Balance: <strong>${user.balance} holobucks</strong></p>
-                `;
-            } else {
-                document.getElementById('balance-display').innerHTML = `
-                    <p>No account found. <a href="account.html">Create one first</a></p>
-                `;
-            }
-        }
-        
-        // Generate random inventory for NPCs
-        function generateInventory(budget) {
-            const inventory = [];
-            let remaining = budget;
-            
-            // Shuffle items
-            const shuffledItems = [...itemsDB].sort(() => 0.5 - Math.random());
-            
-            for (const item of shuffledItems) {
-                if (remaining <= 0) break;
+                const sidebarUser = document.getElementById('sidebar-user');
                 
-                // Random chance to include item
-                if (Math.random() > 0.7) {
-                    const maxQty = Math.floor(remaining / item.basePrice);
-                    if (maxQty > 0) {
-                        const qty = Math.floor(Math.random() * maxQty) + 1;
-                        inventory.push({
-                            id: item.id,
-                            name: item.name,
-                            price: Math.floor(item.basePrice * (0.8 + Math.random() * 0.4)), // Random price variation
-                            quantity: qty
-                        });
-                        remaining -= qty * item.basePrice;
-                    }
-                }
+                sidebarUser.querySelector('.username').textContent = gameData.currentUser;
+                sidebarUser.querySelector('.balance').textContent = `${user.balance} holobucks`;
+                sidebarUser.querySelector('.avatar').textContent = gameData.currentUser.charAt(0).toUpperCase();
+                
+                // Update user balance
+                document.getElementById('user-balance').textContent = `${user.balance} holobucks`;
+                
+                // Update user inventory
+                updateUserInventory();
+                
+                // Load NPC traders
+                loadNPCs();
+            } else {
+                document.getElementById('sidebar-user').querySelector('.username').textContent = "Guest";
+                document.getElementById('sidebar-user').querySelector('.balance').textContent = "0 holobucks";
+                document.getElementById('user-balance').textContent = "Please create an account first";
+                document.getElementById('npcs-container').innerHTML = "<p>Please create an account to trade</p>";
+            }
+        });
+        
+        function updateUserInventory() {
+            const gameData = getGameData();
+            const inventoryEl = document.getElementById('user-inventory');
+            
+            if (!gameData.currentUser || !gameData.users[gameData.currentUser].items || 
+                gameData.users[gameData.currentUser].items.length === 0) {
+                inventoryEl.innerHTML = "<p>Your inventory is empty</p>";
+                return;
             }
             
-            return inventory;
+            let html = '<div class="inventory-grid">';
+            gameData.users[gameData.currentUser].items.forEach(item => {
+                html += `
+                    <div class="item-card" data-id="${item.id}">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">Qty: ${item.quantity}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            inventoryEl.innerHTML = html;
         }
         
-        // Update NPC displays
-        function updateNPCs() {
+        function loadNPCs() {
             const gameData = getGameData();
-            const npcListEl = document.getElementById('npc-list');
-            npcListEl.innerHTML = "";
+            const npcsContainer = document.getElementById('npcs-container');
             
+            if (!gameData.npcs || gameData.npcs.length === 0) {
+                npcsContainer.innerHTML = "<p>No traders available at the moment</p>";
+                return;
+            }
+            
+            let html = '';
             gameData.npcs.forEach(npc => {
-                // Generate inventory if empty
-                if (npc.items.length === 0) {
-                    npc.items = generateInventory(npc.balance / 2);
-                }
-                
-                // Create NPC card
-                const card = document.createElement('div');
-                card.className = 'npc-card';
-                card.innerHTML = `
-                    <h3>${npc.name}</h3>
-                    <p>Balance: ${npc.balance} holobucks</p>
-                    
-                    <div class="inventory">
-                        <div class="inventory-title">
-                            <span>Item</span>
-                            <span>Price</span>
+                html += `
+                    <div class="trader-card" data-id="${npc.id}">
+                        <div class="trader-header">
+                            <h4 class="trader-name">${npc.name}</h4>
+                            <span class="trader-balance">${npc.balance} holobucks</span>
                         </div>
-                        <div id="npc-${npc.id}-inventory">
-                            ${npc.items.map(item => `
-                                <div class="inventory-item">
-                                    <span>${item.name} (${item.quantity})</span>
-                                    <span>${item.price} holobucks</span>
-                                </div>
-                            `).join('')}
+                        
+                        <h5>Inventory:</h5>
+                        <div class="inventory-grid" id="npc-${npc.id}-inventory">
+                            ${npc.items.length > 0 ? 
+                                npc.items.map(item => `
+                                    <div class="item-card" data-id="${item.id}">
+                                        <div class="item-name">${item.name}</div>
+                                        <div class="item-price">${item.price} holobucks</div>
+                                        <div class="item-quantity">Qty: ${item.quantity}</div>
+                                    </div>
+                                `).join('') : 
+                                '<p>This trader has no items</p>'
+                            }
                         </div>
-                    </div>
-                    
-                    <div class="trade-form">
-                        <select id="npc-${npc.id}-item">
-                            ${npc.items.map(item => `
-                                <option value="${item.id}">${item.name} - ${item.price} holobucks</option>
-                            `).join('')}
-                        </select>
-                        <input type="number" id="npc-${npc.id}-quantity" min="1" value="1">
-                        <select id="npc-${npc.id}-action">
-                            <option value="buy">Buy</option>
-                            <option value="sell">Sell</option>
-                        </select>
-                        <button class="btn trade-btn" data-npc="${npc.id}">Trade</button>
+                        
+                        <div class="trade-form">
+                            <h5>Trade with ${npc.name}:</h5>
+                            <div class="form-group">
+                                <label for="npc-${npc.id}-action">Action:</label>
+                                <select id="npc-${npc.id}-action">
+                                    <option value="buy">Buy</option>
+                                    <option value="sell">Sell</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="npc-${npc.id}-item">Item:</label>
+                                <select id="npc-${npc.id}-item">
+                                    ${npc.items.map(item => `
+                                        <option value="${item.id}">${item.name} - ${item.price} holobucks</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="npc-${npc.id}-quantity">Quantity:</label>
+                                <input type="number" id="npc-${npc.id}-quantity" min="1" value="1">
+                            </div>
+                            <button class="trade-btn" onclick="executeTrade(${npc.id})">Execute Trade</button>
+                        </div>
                     </div>
                 `;
-                npcListEl.appendChild(card);
             });
             
-            // Add event listeners to trade buttons
-            document.querySelectorAll('.trade-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const npcId = parseInt(this.getAttribute('data-npc'));
-                    const itemId = parseInt(document.getElementById(`npc-${npcId}-item`).value);
-                    const quantity = parseInt(document.getElementById(`npc-${npcId}-quantity`).value);
-                    const action = document.getElementById(`npc-${npcId}-action`).value;
-                    
-                    if (!quantity || quantity < 1) {
-                        alert("Please enter a valid quantity");
-                        return;
-                    }
-                    
-                    tradeWithNPC(npcId, itemId, quantity, action);
-                });
-            });
-            
-            saveGameData(gameData);
+            npcsContainer.innerHTML = html;
         }
         
-        // Trade with NPC
-        function tradeWithNPC(npcId, itemId, quantity, action) {
+        function executeTrade(npcId) {
             const gameData = getGameData();
-            const user = gameData.users[gameData.currentUser];
-            const npc = gameData.npcs.find(n => n.id === npcId);
-            const npcItem = npc.items.find(i => i.id === itemId);
-            
-            if (!npcItem || npcItem.quantity < quantity) {
-                alert("Not enough items available!");
-                return;
-            }
-            
-            const itemInfo = itemsDB.find(i => i.id === itemId);
-            const totalPrice = npcItem.price * quantity;
-            
-            if (action === 'buy') {
-                if (user.balance < totalPrice) {
-                    alert("Not enough holobucks!");
-                    return;
-                }
-                
-                // Execute trade
-                user.balance -= totalPrice;
-                npc.balance += totalPrice;
-                
-                if (!user.items) user.items = [];
-                const userItem = user.items.find(i => i.id === itemId);
-                if (userItem) {
-                    userItem.quantity += quantity;
-                } else {
-                    user.items.push({ id: itemId, name: itemInfo.name, quantity });
-                }
-                
-                npcItem.quantity -= quantity;
-                if (npcItem.quantity <= 0) {
-                    npc.items = npc.items.filter(i => i.id !== itemId);
-                }
-            } else {
-                // Check if player has the item
-                const userItem = user.items?.find(i => i.id === itemId);
-                if (!userItem || userItem.quantity < quantity) {
-                    alert("You don't have enough of this item!");
-                    return;
-                }
-                
-                // Check if NPC has enough money
-                if (npc.balance < totalPrice) {
-                    alert("This NPC doesn't have enough holobucks!");
-                    return;
-                }
-                
-                // Execute trade
-                user.balance += totalPrice;
-                npc.balance -= totalPrice;
-                
-                userItem.quantity -= quantity;
-                if (userItem.quantity <= 0) {
-                    user.items = user.items.filter(i => i.id !== itemId);
-                }
-                
-                const npcExistingItem = npc.items.find(i => i.id === itemId);
-                if (npcExistingItem) {
-                    npcExistingItem.quantity += quantity;
-                } else {
-                    npc.items.push({ id: itemId, name: itemInfo.name, price: npcItem.price, quantity });
-                }
-            }
-            
-            saveGameData(gameData);
-            updateBalance();
-            updateNPCs();
-            updatePlayerInventory();
-            alert(`Trade successful! ${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} ${itemInfo.name} for ${totalPrice} holobucks`);
-        }
-        
-        // Update player inventory
-        function updatePlayerInventory() {
-            const gameData = getGameData();
-            const inventoryEl = document.getElementById('player-inventory');
-            
             if (!gameData.currentUser) {
-                inventoryEl.innerHTML = "<p>No account found. <a href='account.html'>Create one first</a></p>";
+                alert("Please create an account first");
                 return;
             }
             
-            const user = gameData.users[gameData.currentUser];
+            const action = document.getElementById(`npc-${npcId}-action`).value;
+            const itemId = parseInt(document.getElementById(`npc-${npcId}-item`).value);
+            const quantity = parseInt(document.getElementById(`npc-${npcId}-quantity`).value);
             
-            if (!user.items || user.items.length === 0) {
-                inventoryEl.innerHTML = "<p>Your inventory is empty.</p>";
+            if (isNaN(quantity) || quantity < 1) {
+                alert("Please enter a valid quantity");
                 return;
             }
             
-            inventoryEl.innerHTML = `
-                <div class="inventory-title">
-                    <span>Item</span>
-                    <span>Quantity</span>
-                </div>
-                ${user.items.map(item => `
-                    <div class="inventory-item">
-                        <span>${item.name}</span>
-                        <span>${item.quantity}</span>
-                    </div>
-                `).join('')}
-            `;
+            if (tradeWithNPC(npcId, itemId, quantity, action)) {
+                alert("Trade executed successfully!");
+                // Refresh displays
+                updateUserInventory();
+                loadNPCs();
+                
+                // Update balance
+                const user = gameData.users[gameData.currentUser];
+                document.getElementById('user-balance').textContent = `${user.balance} holobucks`;
+                document.getElementById('sidebar-user').querySelector('.balance').textContent = `${user.balance} holobucks`;
+            }
         }
-        
-        // Initialize page
-        updateBalance();
-        updateNPCs();
-        updatePlayerInventory();
     </script>
 </body>
 </html>
