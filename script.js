@@ -25,6 +25,11 @@ if (!localStorage.getItem('holobank')) {
         }
     }
     
+    // Generate initial NPC inventories
+    initialData.npcs.forEach(npc => {
+        npc.items = generateInventory(npc.balance / 2);
+    });
+    
     localStorage.setItem('holobank', JSON.stringify(initialData));
 }
 
@@ -70,25 +75,6 @@ const itemsDB = [
     { id: 8, name: "Glitch Potion", basePrice: 60 }
 ];
 
-// Update crypto prices automatically
-function updateCryptoPrices() {
-    const gameData = getGameData();
-    
-    for (let coin in gameData.crypto) {
-        // Add new price to history
-        const change = (Math.random() * 10 - 5) * (gameData.crypto[coin].price / 20);
-        gameData.crypto[coin].price = Math.max(1, gameData.crypto[coin].price + change);
-        gameData.crypto[coin].history.push(gameData.crypto[coin].price);
-        
-        // Keep only last 30 prices
-        if (gameData.crypto[coin].history.length > 30) {
-            gameData.crypto[coin].history.shift();
-        }
-    }
-    
-    saveGameData(gameData);
-}
-
 // Generate random inventory for NPCs
 function generateInventory(budget) {
     const inventory = [];
@@ -119,60 +105,23 @@ function generateInventory(budget) {
     return inventory;
 }
 
-// Initialize NPCs with inventory
-function initNPCs() {
+// Update crypto prices automatically
+function updateCryptoPrices() {
     const gameData = getGameData();
     
-    // Only generate items if NPC has empty inventory
-    gameData.npcs.forEach(npc => {
-        if (npc.items.length === 0) {
-            npc.items = generateInventory(npc.balance / 2);
-        }
-    });
-    
-    saveGameData(gameData);
-}
-
-// Update user balance and refresh display
-function updateUserBalance(amount) {
-    const gameData = getGameData();
-    if (gameData.currentUser) {
-        gameData.users[gameData.currentUser].balance += amount;
-        saveGameData(gameData);
-        return true;
-    }
-    return false;
-}
-
-// Trade crypto currency
-function tradeCrypto(symbol, amount, action) {
-    const gameData = getGameData();
-    const user = gameData.users[gameData.currentUser];
-    const crypto = gameData.crypto[symbol];
-    const totalCost = crypto.price * amount;
-    
-    if (action === 'buy') {
-        if (user.balance < totalCost) {
-            alert("Not enough holobucks!");
-            return false;
-        }
+    for (let coin in gameData.crypto) {
+        // Add new price to history
+        const change = (Math.random() * 10 - 5) * (gameData.crypto[coin].price / 20);
+        gameData.crypto[coin].price = Math.max(1, gameData.crypto[coin].price + change);
+        gameData.crypto[coin].history.push(gameData.crypto[coin].price);
         
-        user.balance -= totalCost;
-        if (!user.crypto[symbol]) user.crypto[symbol] = 0;
-        user.crypto[symbol] += amount;
-    } else {
-        if (!user.crypto[symbol] || user.crypto[symbol] < amount) {
-            alert("Not enough crypto!");
-            return false;
+        // Keep only last 30 prices
+        if (gameData.crypto[coin].history.length > 30) {
+            gameData.crypto[coin].history.shift();
         }
-        
-        user.balance += totalCost;
-        user.crypto[symbol] -= amount;
-        if (user.crypto[symbol] <= 0.001) delete user.crypto[symbol];
     }
     
     saveGameData(gameData);
-    return true;
 }
 
 // Trade with NPC
@@ -246,56 +195,6 @@ function tradeWithNPC(npcId, itemId, quantity, action) {
     saveGameData(gameData);
     return true;
 }
-
-// Generate SVG path for price chart
-function generateChartPath(prices) {
-    if (prices.length < 2) return '';
-    
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    const range = max - min || 1;
-    
-    let path = `M 0 ${100 - ((prices[0] - min) / range * 100)}`;
-    
-    for (let i = 1; i < prices.length; i++) {
-        const x = (i / (prices.length - 1)) * 100;
-        const y = 100 - ((prices[i] - min) / range * 100);
-        path += ` L ${x} ${y}`;
-    }
-    
-    return `<path d="${path}" />`;
-}
-
-// Display dice face
-function displayDice(number, element) {
-    const dots = {
-        1: [[0, 0, 0], [0, 1, 0], [0, 0, 0]],
-        2: [[1, 0, 0], [0, 0, 0], [0, 0, 1]],
-        3: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-        4: [[1, 0, 1], [0, 0, 0], [1, 0, 1]],
-        5: [[1, 0, 1], [0, 1, 0], [1, 0, 1]],
-        6: [[1, 0, 1], [1, 0, 1], [1, 0, 1]]
-    };
-    
-    element.innerHTML = "";
-    const face = dots[number];
-    
-    for (let row = 0; row < 3; row++) {
-        for (let col = 0; col < 3; col++) {
-            if (face[row][col] === 1) {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                element.appendChild(dot);
-            } else {
-                const empty = document.createElement('div');
-                element.appendChild(empty);
-            }
-        }
-    }
-}
-
-// Initialize NPCs when the game loads
-initNPCs();
 
 // Update crypto prices every 30 seconds
 setInterval(updateCryptoPrices, 30000);
